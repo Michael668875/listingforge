@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Document {% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'listings/style.css' %}">
+    <link rel="stylesheet" href="{% static 'listings/bootstrap.min.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'keyboard_tracker/images/favicon.ico' %}">
+</head>
+<body>
+    {% block content %}{% endblock %}
+
+    <script src="{% static 'keyboard_tracker/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

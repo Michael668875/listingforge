@@ -1,0 +1,115 @@
+    body {
+      font-family: Inter, sans-serif;
+      background: #0f0f0f;
+      color: #f5f5f5;
+      padding-bottom: 80px;
+    }
+
+    section {
+      padding: 70px 0;
+      border-bottom: 1px solid #2b2b2b;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      color: #b5b5b5;
+      margin-bottom: 40px;
+    }
+
+    .mockup-wrapper {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    .hero-card {
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      border-radius: 18px;
+      padding: 20px;
+      height: 100%;
+    }
+
+    .listing-img {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .badge-pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .table td,
+    .table th {
+      vertical-align: middle;
+    }
+
+    .menu-link {
+      text-decoration: none;
+      margin-right: 20px;
+      font-weight: 500;
+    }
+
+    .price-down {
+      color: #4ade80;
+      font-weight: 700;
+    }
+
+    .price-up {
+      color: #f87171;
+      font-weight: 700;
+    }
+
+    /* =============================
+       THEME 1
+    ============================== */
+
+    .theme1 {
+      background: #111111;
+    }
+
+    .theme1 .navbar-custom {
+      background: #1a1a1a;
+      border-bottom: 1px solid #2b2b2b;
+    }
+
+    .theme1 .menu-link {
+      color: #e5e5e5;
+    }
+
+    .theme1 .hero-card,
+    .theme1 .stat-card,
+    .theme1 .table-wrap {
+      background: #1c1c1c;
+    }
+
+    .theme1 .accent {
+      color: #ffd500;
+    }
+
+    .theme1 .btn-primary {
+      background: #d01012;
+      border: none;
+    }
+
+    .theme1 .table {
+      color: #f5f5f5;
+    }
+
+    .theme1 .table tbody tr:hover {
+      background: #262626;
+    }
