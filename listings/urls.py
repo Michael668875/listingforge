@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     path("", views.Home.as_view(), name="index"),
-    path("listings/", views.ListingsView.as_view(), name="listings"),
+    path("listings/", views.ListingView.as_view(), name="listings"),
     path(
     "robots.txt",
             TemplateView.as_view(

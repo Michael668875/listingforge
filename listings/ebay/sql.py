@@ -11,7 +11,6 @@ def insert_listings():
                 currency,
                 image_urls,
                 condition,
-                marketplace,
                 country,
                 affiliate_url,
                 last_seen,
@@ -26,7 +25,6 @@ def insert_listings():
                 ts.currency,
                 ts.image_urls,
                 ts.condition,
-                ts.marketplace,
                 ts.item_country,
                 ts.affiliate_url,
                 ts.last_seen,
@@ -38,15 +36,13 @@ def insert_listings():
                 SELECT 1
                 FROM jsonb_array_elements(ts.categories) AS cat
                 WHERE cat->>'categoryId' IN (
-                    '33963',
-                    '3676',
-                    '58058'
+                    '139973'
                 )
             )
             ON CONFLICT (ebay_item_id)
             DO NOTHING;
         """)
-
+        print(f"Inserted {cursor.rowcount} items into listings.")
 
 def update_listing_prices():
     with connection.cursor() as cursor:
