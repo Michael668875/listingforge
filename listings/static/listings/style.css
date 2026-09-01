@@ -113,3 +113,12 @@
     .theme1 .table tbody tr:hover {
       background: #262626;
     }
+
+    .theme1 .game-image{
+    width:100%;
+    aspect-ratio:1;
+    object-fit:contain;
+    background:#111;
+    border-radius:8px;
+    padding:10px;
+}
