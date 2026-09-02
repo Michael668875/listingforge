@@ -1,0 +1,80 @@
+{% extends "listings/layout.html" %}
+
+{% block title %}Price Drops{% endblock %}
+
+{% block content %}
+<div class="p-4 p-lg-5">
+<div class="table-wrap rounded-4 p-3">
+    <h3 class="mb-4">Price Drops</h3>
+    <p>Discover listings that have recently been discounted and may offer better value.</p>
+
+<div class="row g-4">
+{% for drop in pricehistory_list %}
+
+<div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+    <div class="keyboard-card h-100">
+
+        {% if drop.listing.image_urls %}
+            <img
+                src="{{ drop.listing.image_urls.0 }}"
+                class="keyboard-image"
+                alt="{{ drop.listing.title }}"
+                loading="lazy">
+        {% endif %}
+
+        <h5 class="mt-3">
+            {{ drop.listing.title }}
+        </h5>
+
+        <div class="keyboard-meta my-3">
+
+            <div>
+                <span class="label">Old Price</span><br>
+                {%  if drop.old_price %}
+                {{ drop.listing.currency }} {{ drop.listing.currency_symbol }}{{ drop.old_price }}
+                {% else %}
+                  -
+                {% endif %}
+            </div>
+
+            <div>
+                <span class="label">New Price</span><br>
+                 {%  if drop.price %}
+                  {{ drop.listing.currency }} {{ drop.listing.currency_symbol }}{{ drop.price }}
+                  {% else %}
+                    -
+                  {% endif %}
+            </div>
+
+            <div>
+                <span class="discount my-3">Discount
+                {% if drop.discount_percent is not none %}
+                {{ drop.discount_percent|floatformat:0 }}%
+              {% else %}
+                -
+              {% endif %}
+              </span>
+            </div>
+
+        </div>
+
+        <a href="{{ drop.listing.affiliate_url }}" target="_blank" class="btn btn-primary w-100 mt-auto">
+            View on eBay
+        </a>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="col-12">
+    <p>No price drops right now.</p>
+</div>
+
+{% endfor %}
+</div>
+</div>
+</div>
+{% endblock %}

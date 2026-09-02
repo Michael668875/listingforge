@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path("", views.Home.as_view(), name="index"),
     path("listings/", views.ListingView.as_view(), name="listings"),
+    path("pricedrops/", views.PriceDropsView.as_view(), name="price_drops"),
     path(
     "robots.txt",
             TemplateView.as_view(

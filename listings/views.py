@@ -18,7 +18,7 @@ class ListingView(ListView):
         return Listing.objects.listings(country)
 
 class PriceDropsView(ListView):
-    template_name = "keyboard_tracker/pricedrops.html"
+    template_name = "listings/pricedrops.html"
     paginate_by = 40
     #context_object_name = "drops"
 
