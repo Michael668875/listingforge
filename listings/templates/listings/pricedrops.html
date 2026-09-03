@@ -13,12 +13,12 @@
 
 <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
 
-    <div class="keyboard-card h-100">
+    <div class="listing-card h-100">
 
         {% if drop.listing.image_urls %}
             <img
                 src="{{ drop.listing.image_urls.0 }}"
-                class="keyboard-image"
+                class="listing-image"
                 alt="{{ drop.listing.title }}"
                 loading="lazy">
         {% endif %}
@@ -27,7 +27,7 @@
             {{ drop.listing.title }}
         </h5>
 
-        <div class="keyboard-meta my-3">
+        <div class="listing-meta my-3">
 
             <div>
                 <span class="label">Old Price</span><br>

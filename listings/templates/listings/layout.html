@@ -10,8 +10,57 @@
     <link rel="stylesheet" href="{% static 'listings/style.css' %}">
 </head>
 <body>
+    <section class="theme1">
     {% block content %}{% endblock %}
+        {% load pagination_tags %}
 
+    {% if is_paginated %}
+
+    {% elided_page_range page_obj as page_range %}
+
+        <nav class="pagination">
+
+            {% if page_obj.has_previous %}
+                <a href="{% pagination_url request 1 %}">First</a>
+                <a href="{% pagination_url request page_obj.previous_page_number %}">
+                    Previous
+                </a>
+            {% endif %}
+
+            {% for num in page_range %}
+
+                {% if num == page_obj.paginator.ELLIPSIS %}
+
+                    <span class="ellipsis">...</span>
+
+                {% elif num == page_obj.number %}
+
+                    <span class="current-page">{{ num }}</span>
+
+                {% else %}
+
+                    <a href="{% pagination_url request num %}">
+                        {{ num }}
+                    </a>
+
+                {% endif %}
+
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="{% pagination_url request page_obj.next_page_number %}">
+                    Next
+                </a>
+                <a href="{% pagination_url request paginator.num_pages %}">
+                    Last
+                </a>
+            {% endif %}
+
+        </nav>
+
+    {% endif %}
+
+    </section>
     <script src="{% static 'listings/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
