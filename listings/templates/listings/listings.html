@@ -4,205 +4,86 @@
 
 {% block content %}
 
-<section class="theme1">
-    <div class="container">
+    <div class="p-4 p-lg-5">
+    
+    {% include "listings/includes/_herocard.html" %}
+
+        <div class="table-wrap rounded-4 p-3">
+
+            <h3 class="mb-4">
+                Best Deals
+            </h3>
 
 
-    <div class="mockup-wrapper">
+            <div class="row g-4">
 
-        <nav class="navbar navbar-expand-lg navbar-custom px-4 py-3">
-            <div class="container-fluid">
+                {% for listing in listings %}
 
-                <span class="navbar-brand text-white fw-bold fs-4">
-                    BrickTracker
-                </span>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
 
-                <div>
-                    <a class="menu-link" href="#">Home</a>
-                    <a class="menu-link" href="#">Overview</a>
-                    <a class="menu-link" href="#">Best Deals</a>
-                    <a class="menu-link" href="#">Price Drops</a>
-                    <a class="menu-link" href="#">Available Models</a>
-                </div>
+                    <div class="listing-card h-100">
 
-            </div>
-        </nav>
-
-
-        <div class="p-4 p-lg-5">
-
-            <div class="hero-card">
-
-                <div class="row align-items-center">
-
-                    <div class="col-lg-8">
-
-                        <div class="badge-pill bg-primary text-dark mb-3">
-                            LIVE MARKET TRACKING
-                        </div>
-
-                        <h1 class="display-5 fw-bold mb-3">
-                            Track LEGO prices like a collector.
-                        </h1>
-
-                        <p class="text-secondary mb-4">
-                            Discover deals, monitor price drops, and compare listings across thousands of LEGO sets.
-                        </p>
-
-                        <button class="btn btn-primary btn-lg">
-                            View Best Deals
-                        </button>
-
-                    </div>
-
-
-                    <div class="col-lg-4 text-center mt-4 mt-lg-0">
+                        {% if listing.image_urls %}
 
                         <img
-                            class="img-fluid rounded-4"
-                            src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?q=80&w=800&auto=format&fit=crop"
-                            alt="LEGO"
+                            src="{{ listing.image_urls.0 }}"
+                            class="listing-image"
+                            alt="{{ listing.title }}"
+                            loading="lazy"
                         >
 
-                    </div>
-
-                </div>
-
-            </div>
+                        {% endif %}
 
 
-            <div class="row g-4 mb-4">
-
-                <div class="col-md-4">
-
-                    <div class="stat-card">
-                        <div class="text-secondary mb-2">
-                            Tracked Listings
-                        </div>
-
-                        <div class="display-6 fw-bold">
-                            24,921
-                        </div>
-                    </div>
-
-                </div>
+                        <h5 class="mt-3">
+                            {{ listing.title }}
+                        </h5>
 
 
-                <div class="col-md-4">
+                        <div class="listing-meta my-3">
 
-                    <div class="stat-card">
-                        <div class="text-secondary mb-2">
-                            Biggest Drop Today
-                        </div>
-
-                        <div class="display-6 fw-bold accent">
-                            -18%
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <div class="col-md-4">
-
-                    <div class="stat-card">
-                        <div class="text-secondary mb-2">
-                            Average Savings
-                        </div>
-
-                        <div class="display-6 fw-bold">
-                            $42
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="table-wrap rounded-4 p-3">
-
-                <h3 class="mb-4">
-                    Best Deals
-                </h3>
-
-
-                <div class="row g-4">
-
-                    {% for listing in listings %}
-
-                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-
-                        <div class="listing-card h-100">
-
-                            {% if listing.image_urls %}
-
-                            <img
-                                src="{{ listing.image_urls.0 }}"
-                                class="listing-image"
-                                alt="{{ listing.title }}"
-                                loading="lazy"
-                            >
-
-                            {% endif %}
-
-
-                            <h5 class="mt-3">
-                                {{ listing.title }}
-                            </h5>
-
-
-                            <div class="listing-meta my-3">
-
-                                <div>
-                                    <span class="label">Price</span>
-                                    <br>
-                                    {{ listing.currency }} {{ listing.currency_symbol }}{{ listing.price }}
-                                </div>
-
-
-                                <div>
-                                    <span class="label">Condition</span>
-                                    <br>
-                                    {{ listing.condition }}
-                                </div>
-
+                            <div>
+                                <span class="label">Price</span>
+                                <br>
+                                {{ listing.currency }} {{ listing.currency_symbol }}{{ listing.price }}
                             </div>
 
 
-                            <a
-                                href="{{ listing.affiliate_url }}"
-                                target="_blank"
-                                class="btn btn-primary w-100 mt-auto"
-                            >
-                                View on eBay
-                            </a>
+                            <div>
+                                <span class="label">Condition</span>
+                                <br>
+                                {{ listing.condition }}
+                            </div>
 
                         </div>
 
+
+                        <a
+                            href="{{ listing.affiliate_url }}"
+                            target="_blank"
+                            class="btn btn-primary w-100 mt-auto"
+                        >
+                            View on eBay
+                        </a>
+
                     </div>
-
-
-                    {% empty %}
-
-                    <div class="col-12">
-                        <p>No listings found.</p>
-                    </div>
-
-
-                    {% endfor %}
 
                 </div>
+
+
+                {% empty %}
+
+                <div class="col-12">
+                    <p>No listings found.</p>
+                </div>
+
+
+                {% endfor %}
 
             </div>
 
         </div>
 
     </div>
-
-</div>
-
-
-</section>
 
 {% endblock %}
