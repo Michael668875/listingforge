@@ -1,0 +1,52 @@
+{% extends "listings/layout.html" %}
+
+{% block title %}Systems{% endblock %}
+
+{% block content %}
+<div class="p-4 p-lg-5">
+<div class="table-wrap rounded-4 p-3">
+
+<h1 class="mb-3">Available Systems</h1>
+
+<p class="d-none d-md-block">
+    Browse all tracked systems to find specific games quickly.
+</p>
+
+<p class="d-md-none mobile-title">
+    Explore games by system.
+</p>
+
+{% if systems_list %}
+
+<div class="row g-4">
+
+{% for system in systems_list %}
+<div class="col-6 col-md-4 col-lg-3 col-xl-2">
+
+    <a href="{% url 'system' slug=system.slug %}{% if selected_country %}?country={{ selected_country }}{% endif %}"
+       class="text-decoration-none">
+
+        <div class="brand-chip text-center">
+
+            <div class="system-name">
+                {{ system.name }}
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<p>No systems available.</p>
+
+{% endif %}
+</div>
+</div>
+
+{% endblock %}

@@ -133,3 +133,31 @@ class PriceHistory(models.Model):
 
     def __str__(self):
         return f"{self.listing.ebay_item_id}: {self.price}"
+
+# consoles and PCs, systems etc
+class Systems(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
+
+    #objects = CanonBrandManager()
+
+    class Meta:
+        db_table = "systems"
+
+    def __str__(self):
+        return self.name
+
+# alternate names for systems
+class SystemAlias(models.Model):
+    system = models.ForeignKey(
+        Systems,
+        on_delete=models.CASCADE,
+        related_name="aliases"
+    )
+    alias = models.CharField(max_length=255, unique=True)
+
+    class Meta:
+            db_table = "aliases"
+
+    def __str__(self):
+        return self.alias

@@ -1,0 +1,309 @@
+{% extends "listings/layout.html" %}
+
+{% block title %}Advanced Search{% endblock %}
+
+{% block content %}
+
+<div class="p-4 p-lg-5">
+<div class="table-wrap rounded-4 p-3">
+
+<h3 class="mb-4">Advanced Search</h3>
+
+<form method="get" action="{% url 'search_results' %}">
+
+{% if country %}
+    <input
+        type="hidden"
+        name="country"
+        value="{{ country }}"
+    >
+{% endif %}
+
+
+<!-- Brands -->
+
+<div class="stat-card mb-4">
+
+    <div class="card-header">
+        <h2 class="h5 mb-4">Brands</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="dropdown">
+
+            <button
+                id="brandDropdownButton"
+                class="btn btn-outline-info dropdown-toggle text-start"
+                type="button"
+                data-bs-toggle="dropdown"
+                data-bs-auto-close="outside"
+                aria-expanded="false"
+            >
+                Select Brands
+            </button>
+
+
+            <div class="dropdown-menu brand-dropdown p-3">
+
+                {% for brand in brands %}
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input brand-checkbox"
+                            type="checkbox"
+                            name="brands"
+                            value="{{ brand.slug }}"
+                            id="brand-{{ forloop.counter }}"
+                        >
+
+                        <label
+                            class="form-check-label"
+                            for="brand-{{ forloop.counter }}"
+                        >
+                            {{ brand.name }}
+                        </label>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Switches -->
+
+<div class="stat-card mb-4">
+
+    <div class="card-header">
+        <h2 class="h5 mb-4">Switches</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            {% for switch in switches %}
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="switches"
+                            value="{{ switch.slug }}"
+                            id="switch-{{ forloop.counter }}"
+                        >
+
+                        <label
+                            class="form-check-label"
+                            for="switch-{{ forloop.counter }}"
+                        >
+                            {{ switch.name }}
+                        </label>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Sizes -->
+
+<div class="stat-card mb-4">
+
+    <div class="card-header">
+        <h2 class="h5 mb-4">Sizes</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            {% for size in sizes %}
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="sizes"
+                            value="{{ size.slug }}"
+                            id="size-{{ forloop.counter }}"
+                        >
+
+                        <label
+                            class="form-check-label"
+                            for="size-{{ forloop.counter }}"
+                        >
+                            {{ size.name }}
+                        </label>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Features -->
+
+<div class="stat-card mb-4">
+
+    <div class="card-header">
+        <h2 class="h5 mb-4">Features</h2>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            {% for feature in features %}
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="features"
+                            value="{{ feature.slug }}"
+                            id="feature-{{ forloop.counter }}"
+                        >
+
+                        <label
+                            class="form-check-label"
+                            for="feature-{{ forloop.counter }}"
+                        >
+                            {{ feature.name }}
+                        </label>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Search button -->
+
+<div class="d-grid d-md-flex justify-content-md-end mb-4">
+
+    <button
+        type="submit"
+        class="btn btn-primary px-5"
+    >
+        Search
+    </button>
+
+</div>
+
+
+</form>
+
+</div>
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const button = document.getElementById(
+        "brandDropdownButton"
+    );
+
+    const checkboxes = document.querySelectorAll(
+        ".brand-checkbox"
+    );
+
+
+    function updateBrandButton() {
+
+        const selected = [];
+
+
+        checkboxes.forEach(function (checkbox) {
+
+            if (checkbox.checked) {
+
+                const label = document.querySelector(
+                    'label[for="' +
+                    checkbox.id +
+                    '"]'
+                );
+
+                selected.push(
+                    label.textContent.trim()
+                );
+
+            }
+
+        });
+
+
+        if (selected.length === 0) {
+
+            button.textContent = "Select Brands";
+
+        } else if (selected.length <= 2) {
+
+            button.textContent = selected.join(
+                ", "
+            );
+
+        } else {
+
+            button.textContent =
+                selected.length +
+                " brands selected";
+
+        }
+
+    }
+
+
+    checkboxes.forEach(function (checkbox) {
+
+        checkbox.addEventListener(
+            "change",
+            updateBrandButton
+        );
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

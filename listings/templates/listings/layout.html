@@ -11,7 +11,7 @@
 </head>
 <body>
     <section class="theme1">
-        <div class="container">
+        <div class="container-fluid px-4">
         <div class="mockup-wrapper">
     {% include "listings/includes/_navbar.html" %}
     {% block content %}{% endblock %}
@@ -64,6 +64,8 @@
         </nav>
 
     {% endif %}
+
+    {% include "listings/includes/_footer.html" %}
 
     </section>
     <script src="{% static 'listings/bootstrap.bundle.min.js' %}"></script>

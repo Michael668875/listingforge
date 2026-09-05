@@ -1,0 +1,114 @@
+{% extends "listings/layout.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+
+<div class="p-4 p-lg-5">
+<div class="table-wrap rounded-4 p-3">
+<div class="row g-4">
+
+<h3>Search Results</h3>
+
+    <p>{{ page_obj.paginator.count }} games found.</p>
+
+{% for spec in specs %}
+
+<div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+    <div class="listing-card h-100">
+
+        {% if spec.listing.image_urls %}
+            <img
+                src="{{ spec.listing.image_urls.0 }}"
+                class="listing-image"
+                alt="{{ spec.listing.title }}"
+                loading="lazy">
+        {% endif %}
+
+        <h5 class="mt-3">
+            {{ spec.listing.title }}
+        </h5>            
+
+        <div class="listing-meta my-3">
+
+            <div>
+                <span class="label">Price</span><br>
+                {{ spec.listing.currency }} {{ spec.listing.currency_symbol }}{{ spec.listing.price }}
+            </div>
+
+            <div>
+                <span class="label">Condition</span><br>
+                {{ spec.listing.condition }}
+            </div>
+
+        </div>
+
+        <div class="my-3">
+        {% if spec.brand %}
+            <div>
+                <span class="feature label">Brand:</span> {{ spec.brand.name }}
+            </div>
+        {% endif %}
+
+        {% with sizes=spec.get_sizes %}
+            {% if sizes %}
+                <div>
+                    <span class="feature label">Size:</span>
+                    {% for value in sizes %}
+                        {{ value.specification.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% with switches=spec.get_switches %}
+            {% if switches %}
+                <div>
+                    <span class="feature label">Switches:</span>
+                    {% for value in switches %}
+                        {{ value.specification.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% with features=spec.get_features %}
+            {% if features %}
+                <div>
+                    <span class="feature label">Features:</span>
+                    {% for value in features %}
+                        {{ value.specification.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+            </div>
+
+        <a href="{{ spec.listing.affiliate_url }}" target="_blank" class="btn btn-primary w-100 mt-auto">
+            View on eBay
+        </a>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="col-12">
+    <p>No games matched your search.</p>
+</div>
+
+{% endfor %}
+
+</div>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "listings/layout.html" %}
+
+{% block title %}{{ specs_list.0.brand.name }}{% endblock %}
+
+{% block content %}
+<div class="p-4 p-lg-5">
+<div class="table-wrap rounded-4 p-3">
+<h3 class="mb-4">{{ specs_list.0.brand.name }}</h3>
+
+<div class="row g-4">
+
+{% for spec in specs_list %}
+
+<div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+    <div class="listing-card h-100">
+
+        {% if spec.listing.image_urls %}
+            <img
+                src="{{ spec.listing.image_urls.0 }}"
+                class="listing-image"
+                alt="{{ spec.listing.title }}"
+                loading="lazy">
+        {% endif %}
+
+        <h5 class="mt-3">
+            {{ spec.listing.title }}
+        </h5>
+
+        <div class="listing-meta my-3">
+
+            <div>
+                <span class="label">Price</span><br>
+                {{ spec.listing.currency }} {{ spec.listing.currency_symbol }}{{ spec.listing.price }}
+            </div>
+
+            <div>
+                <span class="label">Condition</span><br>
+                {{ spec.listing.condition }}
+            </div>
+
+        </div>
+
+        <a href="{{ spec.listing.affiliate_url }}" target="_blank" class="btn btn-primary w-100 mt-auto">
+            View on eBay
+        </a>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="col-12">
+    <p>No listings found.</p>
+</div>
+
+{% endfor %}
+
+</div>
+</div>
+</div>
+{% endblock %}
