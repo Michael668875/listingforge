@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, RedirectView
-from .models import Listing, PriceHistory, Systems
+from .models import Listing, PriceHistory, System
 
 # Create your views here.
 
@@ -31,25 +31,32 @@ class PriceDropsView(ListView):
 
 
 class SystemsView(ListView):
-    model = Systems
+    model = System
     template_name = "listings/systems.html"
 
     # def get_queryset(self):
     #     country = self.request.GET.get("country", "US")
-        # return CanonBrand.objects.all_brands(country)
+        # return Systems.objects.all_systems(country)
         
 
 class SingleSystemView(ListView):
     template_name = "listings/system.html"
+    context_object_name = "listings"
     paginate_by = 40
 
-    # def get_queryset(self):
-            # return Specs.objects.brand_list(
-            #     slug=self.kwargs["slug"],
-            #     country = self.request.GET.get("country", "US"),
-            # )
-            
+    def get_queryset(self):
+        country = self.request.GET.get("country", "US")
+        slug = self.kwargs["slug"]
 
+        return (
+            Listing.objects.filter(
+                system__slug=slug,
+                status="ACTIVE",
+                country=country,
+            )
+            .select_related("system")
+            .order_by("-last_updated")
+        )
 
 class AdvancedSearchView(TemplateView):
     template_name = "listings/advanced_search.html"

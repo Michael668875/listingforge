@@ -16,11 +16,11 @@
     Explore games by system.
 </p>
 
-{% if systems_list %}
+{% if system_list %}
 
 <div class="row g-4">
 
-{% for system in systems_list %}
+{% for system in system_list %}
 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
 
     <a href="{% url 'system' slug=system.slug %}{% if selected_country %}?country={{ selected_country }}{% endif %}"

@@ -11,6 +11,7 @@ CURRENCY_SYMBOLS = {
 
 # Create your models here.
 
+# A place to save ebay listings that come in via api
 class TempSummary(models.Model):
     ebay_item_id = models.CharField(max_length=255, unique=True)
 
@@ -53,6 +54,33 @@ class TempSummary(models.Model):
         return self.title or self.ebay_item_id
 
 
+# consoles and PCs, systems etc
+class System(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
+
+    class Meta:
+        db_table = "systems"
+
+    def __str__(self):
+        return self.name
+
+# alternate names for systems
+class SystemAlias(models.Model):
+    system = models.ForeignKey(
+        System,
+        on_delete=models.CASCADE,
+        related_name="aliases"
+    )
+    alias = models.CharField(max_length=255, unique=True)
+
+    class Meta:
+            db_table = "aliases"
+
+    def __str__(self):
+        return self.alias
+
+
 class Listing(models.Model):
     STATUS_CHOICES = [
         ("ACTIVE", "Active"),
@@ -85,6 +113,15 @@ class Listing(models.Model):
     ended_at = models.DateTimeField(blank=True, null=True)
 
     last_updated = models.DateTimeField(auto_now=True)
+
+    system = models.ForeignKey(
+        System,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="listings",
+        db_index=True
+    )
 
     objects = ListingManager()
 
@@ -134,30 +171,3 @@ class PriceHistory(models.Model):
     def __str__(self):
         return f"{self.listing.ebay_item_id}: {self.price}"
 
-# consoles and PCs, systems etc
-class Systems(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
-
-    #objects = CanonBrandManager()
-
-    class Meta:
-        db_table = "systems"
-
-    def __str__(self):
-        return self.name
-
-# alternate names for systems
-class SystemAlias(models.Model):
-    system = models.ForeignKey(
-        Systems,
-        on_delete=models.CASCADE,
-        related_name="aliases"
-    )
-    alias = models.CharField(max_length=255, unique=True)
-
-    class Meta:
-            db_table = "aliases"
-
-    def __str__(self):
-        return self.alias

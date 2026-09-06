@@ -1,5 +1,7 @@
 from django.db import transaction
 
+from listings.services.system_parser import process_systems
+
 
 from .sql import (
     insert_listings,
@@ -32,4 +34,6 @@ def run_pipeline():
         increment_miss_count()
 
         mark_ended_listings()
+
+        process_systems()
 
