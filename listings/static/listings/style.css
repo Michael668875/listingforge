@@ -222,6 +222,10 @@
     box-shadow:0 0 15px rgba(0,217,255,.25);
 }
 
+.discount {
+  color: #d01012;
+}
+
 /* pagination */
 
 .pagination {

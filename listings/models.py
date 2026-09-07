@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from .managers import (PriceHistoryManager, ListingManager,)
+from .managers import ListingManager
 
 CURRENCY_SYMBOLS = {
     "USD": "$",
@@ -157,7 +157,7 @@ class PriceHistory(models.Model):
         db_index=True,
     )
 
-    objects = PriceHistoryManager()
+    #objects = PriceHistoryManager()
 
     class Meta:
         db_table = "price_history"

@@ -20,11 +20,11 @@ class ListingView(ListView):
 class PriceDropsView(ListView):
     template_name = "listings/pricedrops.html"
     paginate_by = 40
-    #context_object_name = "drops"
+    context_object_name = "drops"
 
     def get_queryset(self):
         country = self.request.GET.get("country", "US")
-        return PriceHistory.objects.drops(country)    
+        return Listing.objects.drops(country)    
 
 
 #########
@@ -71,11 +71,92 @@ class AdvancedSearchView(TemplateView):
         return context
 
 
+# class SearchResultsView(ListView):
+#     template_name = "listings/search_results.html"
+#     context_object_name = "listings"
+#     paginate_by = 40
+
+
+#     def get_queryset(self):
+#         country = self.request.GET.get("country", "US")
+
+#         queryset = Listing.objects.filter(
+#             country=country,
+#             status="ACTIVE",
+#         )
+
+#         min_price = self.request.GET.get("min_price")
+#         max_price = self.request.GET.get("max_price")
+
+#         if min_price:
+#             queryset = queryset.filter(price__gte=min_price)
+
+#         if max_price:
+#             queryset = queryset.filter(price__lte=max_price)
+
+#         platforms = self.request.GET.getlist("platforms")
+
+#         if platforms:
+#             queryset = queryset.filter(
+#                 system__slug__in=platforms
+#             ).distinct()
+
+#         price_drops = self.request.GET.get("price_drops")
+
+#         if price_drops:
+#             drop_listing_ids = (
+#                 Listing.objects
+#                 .drops(country)
+#                 .values_list("id", flat=True)
+#                 .distinct()
+#             )
+
+#             queryset = queryset.filter(
+#                 id__in=drop_listing_ids
+#             )
+
+#         return queryset.order_by("-last_updated")
+
+#     # required ro preserve url when browsing pages.
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+
+#         params = self.request.GET.copy()
+#         params.pop("page", None)
+
+#         context["search_params"] = params.urlencode()
+
+#         platform_slugs = self.request.GET.getlist("platforms")
+
+
+#         context["selected_platforms"] = System.objects.filter(
+#             slug__in=platform_slugs
+#         )
+
+#         price_drops = self.request.GET.get("price_drops")
+
+#         if price_drops:
+#             drops = PriceHistory.objects.drops(
+#                 self.request.GET.get("country", "US")
+#             )
+
+#             drop_lookup = {
+#                 drop.listing_id: drop
+#                 for drop in drops
+#             }
+
+#             for listing in context["listings"]:
+#                 listing.price_drop = drop_lookup.get(listing.id)
+
+#         context["price_drops"] = price_drops
+
+#         return context
+    
+
 class SearchResultsView(ListView):
     template_name = "listings/search_results.html"
     context_object_name = "listings"
     paginate_by = 40
-
 
     def get_queryset(self):
         country = self.request.GET.get("country", "US")
@@ -101,9 +182,21 @@ class SearchResultsView(ListView):
                 system__slug__in=platforms
             ).distinct()
 
+        price_drops = self.request.GET.get("price_drops")
+
+        if price_drops:
+            drop_listing_ids = (
+                Listing.objects
+                .drops(country)
+                .values_list("id", flat=True)
+            )
+
+            queryset = queryset.filter(
+                id__in=drop_listing_ids
+            )
+
         return queryset.order_by("-last_updated")
 
-    # required ro preserve url when browsing pages.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -116,11 +209,29 @@ class SearchResultsView(ListView):
 
         context["selected_platforms"] = System.objects.filter(
             slug__in=platform_slugs
-    )
+        )
+
+        price_drops = self.request.GET.get("price_drops")
+
+        if price_drops:
+            drops = Listing.objects.drops(
+                self.request.GET.get("country", "US")
+            )
+
+            drop_lookup = {
+                drop.id: drop
+                for drop in drops
+            }
+
+            for listing in context["listings"]:
+                listing.price_drop = drop_lookup.get(listing.id)
+
+        context["price_drops"] = price_drops
 
         return context
-    
-    
+
+
+
 class SearchView(ListView):
     model = Listing
     template_name = "listings/search.html"

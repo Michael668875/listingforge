@@ -57,7 +57,35 @@
                     {% endfor %}
                 </div>
             {% endif %}
-      
+        
+
+            <div class="listing-meta">
+
+            {% if price_drops and listing.price_drop %}
+
+                <div>
+                    <span class="label">Old Price</span><br>
+                    {{ listing.price_drop.listing.currency }}
+                    {{ listing.price_drop.listing.currency_symbol }}
+                    {{ listing.price_drop.old_price }}
+                </div>
+
+                <div>
+                    <span class="label">New Price</span><br>
+                    {{ listing.price_drop.listing.currency }}
+                    {{ listing.price_drop.listing.currency_symbol }}
+                    {{ listing.price_drop.price }}
+                </div>                
+
+                <div>
+                    <span class="label">Discount</span><br>
+                        <span class="discount">
+                            {{ listing.price_drop.discount_percent|floatformat:0 }}%
+                        </span>                    
+                </div>
+
+            {% endif %}
+            </div>
 
         </div>
 

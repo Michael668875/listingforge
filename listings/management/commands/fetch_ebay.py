@@ -13,18 +13,18 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         try:
-            # self.stdout.write("Clearing temp tables...")
-            # truncate_temp_summaries()
+            self.stdout.write("Clearing temp tables...")
+            truncate_temp_summaries()
 
-            # self.stdout.write("Fetching from eBay...")
-            # items = fetch_summaries()
+            self.stdout.write("Fetching from eBay...")
+            items = fetch_summaries()
 
-            # self.stdout.write(
-            #     f"Fetched {len(items)} listings."
-            # )
+            self.stdout.write(
+                f"Fetched {len(items)} listings."
+            )
 
-            # self.stdout.write("Saving temp summaries...")
-            # save_temp_summaries(items)
+            self.stdout.write("Saving temp summaries...")
+            save_temp_summaries(items)
 
             self.stdout.write("Running pipeline...")
             run_pipeline()
