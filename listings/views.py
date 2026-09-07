@@ -34,11 +34,6 @@ class SystemsView(ListView):
     model = System
     template_name = "listings/systems.html"
 
-    # def get_queryset(self):
-    #     country = self.request.GET.get("country", "US")
-        # return Systems.objects.all_systems(country)
-        
-
 class SingleSystemView(ListView):
     template_name = "listings/system.html"
     context_object_name = "listings"
@@ -61,59 +56,54 @@ class SingleSystemView(ListView):
 class AdvancedSearchView(TemplateView):
     template_name = "listings/advanced_search.html"
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    #     country = self.request.GET.get("country", "US")
+        country = self.request.GET.get("country", "US")
 
-    #     context["country"] = country
 
-    #     context["brands"] = CanonBrand.objects.all_brands(
-    #         country=country
-    #     )
+        context["country"] = country
 
-    #     # Switches
-    #     context["switches"] = get_specifications_in_yaml_order(
-    #         "switch",
-    #         "switches"
-    #     )
+        context["platforms"] = System.objects.all()
 
-    #     # Sizes
-    #     context["sizes"] = get_specifications_in_yaml_order(
-    #         "size",
-    #         "sizes"
-    #     )
+        context["listings"] = Listing.objects.filter(country=country)       
 
-    #     # Features
-    #     context["features"] = get_specifications_in_yaml_order(
-    #         "feature",
-    #         "features"
-    #     )
-
-    #     return context
+        return context
 
 
 class SearchResultsView(ListView):
     template_name = "listings/search_results.html"
-    context_object_name = "specs"
+    context_object_name = "listings"
     paginate_by = 40
 
-    # def get_queryset(self):
-    #     country = self.request.GET.get("country", "US")
 
-    #     brands = self.request.GET.getlist("brands")
-    #     switches = self.request.GET.getlist("switches")
-    #     sizes = self.request.GET.getlist("sizes")
-    #     features = self.request.GET.getlist("features")
+    def get_queryset(self):
+        country = self.request.GET.get("country", "US")
 
-    #     return Specs.objects.advanced_search(
-    #         country=country,
-    #         brands=brands,
-    #         switches=switches,
-    #         sizes=sizes,
-    #         features=features,
-    #     )
+        queryset = Listing.objects.filter(
+            country=country,
+            status="ACTIVE",
+        )
 
+        min_price = self.request.GET.get("min_price")
+        max_price = self.request.GET.get("max_price")
+
+        if min_price:
+            queryset = queryset.filter(price__gte=min_price)
+
+        if max_price:
+            queryset = queryset.filter(price__lte=max_price)
+
+        platforms = self.request.GET.getlist("platforms")
+
+        if platforms:
+            queryset = queryset.filter(
+                system__slug__in=platforms
+            ).distinct()
+
+        return queryset.order_by("-last_updated")
+
+    # required ro preserve url when browsing pages.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -121,6 +111,12 @@ class SearchResultsView(ListView):
         params.pop("page", None)
 
         context["search_params"] = params.urlencode()
+
+        platform_slugs = self.request.GET.getlist("platforms")
+
+        context["selected_platforms"] = System.objects.filter(
+            slug__in=platform_slugs
+    )
 
         return context
     

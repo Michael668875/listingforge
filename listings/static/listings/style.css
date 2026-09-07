@@ -282,5 +282,47 @@
     padding: 0 5px;
 }
 
+/* advanced search page */
+
+.platform-dropdown {
+    width: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#platformDropdownButton {
+    width: 300px;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#platformDropdownButton::after {
+    margin-left: auto;
+    flex-shrink: 0;
+}
 
 
+.platform-dropdown {
+    background-color: #2b3035 !important;
+    border: 1px solid #495057;
+}
+
+.platform-dropdown .form-check-label {
+    color: #ffffff !important;
+}
+
+.platform-dropdown .form-check-input {
+    background-color: #ffffff !important;
+    border: 1px solid #adb5bd !important;
+}
+
+.platform-dropdown .form-check-input:checked {
+    background-color: #0dcaf0 !important;
+    border-color: #0dcaf0 !important;
+}
+
+.platform-dropdown .form-check:hover {
+    background-color: #343a40;
+    border-radius: 4px;
+}
