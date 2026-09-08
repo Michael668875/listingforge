@@ -330,3 +330,25 @@
     background-color: #343a40;
     border-radius: 4px;
 }
+
+/* feature labels for advanced search results */
+.listing-features {
+    padding: 10px 0;
+}
+
+.feature-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.feature-value {
+    background: #eee;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.9rem;
+}
+
+
+
