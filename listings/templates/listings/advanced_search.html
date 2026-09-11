@@ -89,56 +89,80 @@
     <div class="card-body">
 
         <div class="row">
-            <div class="row">
+            <!-- Minimum -->
+            <div class="col-md-4">
+                <label for="min-price" class="form-label">Minimum</label>
 
-                <div class="col-6">
-                    <label for="min-price" class="form-label">Minimum</label>
-                    <input
-                        type="number"
-                        name="min_price"
-                        id="min-price"
-                        class="form-control"
-                        min="0"
-                        step="1"
-                        placeholder="0.00"
-                    >
-                </div>
+                <input
+                    type="number"
+                    name="min_price"
+                    id="min-price"
+                    class="form-control mb-2"
+                    min="0"
+                    step="1"
+                    placeholder="0.00"
+                >
 
-                <div class="col-6">
-                    <label for="max-price" class="form-label">Maximum</label>
-                    <input
-                        type="number"
-                        name="max_price"
-                        id="max-price"
-                        class="form-control"
-                        min="0"
-                        step="1"
-                        placeholder="1,000,000.00"
-                    >
-                </div>
-
+                <input
+                    type="range"
+                    id="min-price-slider"
+                    class="form-range"
+                    min="0"
+                    max="1000"
+                    step="5"
+                    value="0"
+                >
             </div>
 
+            <!-- Maximum -->
+            <div class="col-md-4">
+                <label for="max-price" class="form-label">Maximum</label>
 
+                <input
+                    type="number"
+                    name="max_price"
+                    id="max-price"
+                    class="form-control mb-2"
+                    min="0"
+                    step="1"
+                    placeholder="Max"
+                >
+
+                <input
+                    type="range"
+                    id="max-price-slider"
+                    class="form-range"
+                    min="0"
+                    max="1000"
+                    step="5"
+                    value="1000"
+                >
+            </div>
         </div>
 
     </div>
 
 </div>
 
-<!-- Price Drops-->
- <div class="form-check">
+
+<!-- Price Drops -->
+<div class="stat-card mb-4">
+<div class="form-check form-switch">
     <input
-    class="form-check-input"
-    type="checkbox"
-    name="price_drops"
-    value="1"
-    id="priceDrops"
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        name="price_drops"
+        value="1"
+        id="priceDrops"
+        {% if request.GET.price_drops %}checked{% endif %}
     >
     <label class="form-check-label" for="priceDrops">
-        Listings with price drops
+        <span class="mx-3" >Listings with price drops</span>
     </label>
- </div>
+</div>
+</div>
+
 
 <!-- Search button -->
 
@@ -227,6 +251,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+    const minPrice = document.getElementById("min-price");
+    const minSlider = document.getElementById("min-price-slider");
+
+    const maxPrice = document.getElementById("max-price");
+    const maxSlider = document.getElementById("max-price-slider");
+
+    minSlider.addEventListener("input", function () {
+        minPrice.value = this.value;
+    });
+
+    maxSlider.addEventListener("input", function () {
+        maxPrice.value = this.value;
+    });
+
+    minPrice.addEventListener("input", function () {
+        minSlider.value = this.value;
+    });
+
+    maxPrice.addEventListener("input", function () {
+        maxSlider.value = this.value;
+    });
 
 </script>
 

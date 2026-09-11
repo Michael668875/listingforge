@@ -160,7 +160,7 @@
 }
 
 .theme1 .listing-card h5{
-    color:#31f40e;
+    color: white;
     font-size:1rem;
     min-height:3rem;
 }
@@ -170,12 +170,12 @@
     grid-template-columns:1fr 1fr;
     gap:10px;
     margin-top:15px;
-    color:#bd17ef;
+    color: white;
     font-size:.9rem;
 }
 
 .theme1 .listing-meta .label{
-    color:#00d9ff;
+    color:#008cff;
     font-size:.75rem;
     text-transform:uppercase;
     letter-spacing:1px;
@@ -351,4 +351,8 @@
 }
 
 
-
+/* toggle switch */
+.form-switch .form-check-input {
+    width: 2.5em;
+    height: 1.5em;
+}
