@@ -5,8 +5,9 @@
 {% block content %}
 
     <div class="p-4 p-lg-5">
-    
-    {% include "listings/includes/_herocard.html" %}
+    {% if page_obj.number == 1 %}
+        {% include "listings/includes/_herocard.html" %}
+    {% endif %}
 
         <div class="table-wrap rounded-4 p-3">
 
