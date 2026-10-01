@@ -1,20 +1,4 @@
 services:
-  db:
-    image: postgres:17
-    container_name: postgres
-    volumes:
-      - postgres_db:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
-
   lf:
     build: .
     container_name: listingforge
@@ -22,13 +6,13 @@ services:
       - 8010:8000
     volumes:
       - .:/app
-    depends_on:
-      db:
-        condition: service_healthy
     restart: "always"
     env_file:
-      - .env
+      - ../env/listingforge.env
+    networks:
+      - sites_network
 
+networks:
+  sites_network:
+    external: true
 
-volumes:
-  postgres_db:
