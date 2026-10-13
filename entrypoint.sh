@@ -1,10 +1,8 @@
 #!/bin/sh
-
+set -e
 
 echo "Running migrations..."
-python manage.py migrate
+python manage.py migrate --noinput
 
 echo "Starting server..."
-python manage.py runserver 0.0.0.0:8000
-
-
+exec python -m gunicorn --bind 0.0.0.0:8000 --workers 3 listingforge.wsgi:application

@@ -1,12 +1,16 @@
     body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
       font-family: Inter, sans-serif;
       background: #0f0f0f;
       color: #f5f5f5;
       padding-bottom: 80px;
+      overscroll-behavior: none;
     }
 
     section {
-      padding: 70px 0;
+      padding: 10px 0;
       border-bottom: 1px solid #2b2b2b;
     }
 
@@ -74,6 +78,11 @@
       font-weight: 700;
     }
 
+    .brand-logo {
+      text-decoration: none;
+      color: primary;
+    }
+
     /* =============================
        THEME 1
     ============================== */
@@ -122,4 +131,228 @@
     background:#111;
     border-radius:8px;
     padding:10px;
+}
+
+/* cards */
+
+.theme1 .listing-card{
+    display: flex;
+    flex-direction: column;
+    background:#07131a;
+    border:1px solid #f31731;
+    border-radius:12px;
+    padding:16px;
+    transition:.2s;
+}
+
+.theme1 .listing-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 18px rgba(0,217,255,.25);
+}
+
+.theme1 .listing-image{
+    width:100%;
+    aspect-ratio:1;
+    object-fit:contain;
+    background:#111;
+    border-radius:8px;
+    padding:10px;
+}
+
+.theme1 .listing-card h5{
+    color: white;
+    font-size:1rem;
+    min-height:3rem;
+}
+
+.theme1 .listing-meta{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+    color: white;
+    font-size:.9rem;
+}
+
+.theme1 .listing-meta .label{
+    color:#008cff;
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.theme1 .listing-card .btn{
+    margin-top:auto;
+}
+
+.feature {
+    color:#00d9ff;
+}
+
+
+/* styling for brand chips */
+
+.theme1 .brand-chip {
+    background: #07131a;
+    border: 1px solid blue;
+    border-radius: 12px;
+    padding: 10px;
+    transition: .2s;
+
+    width: 100%;
+    height: 80px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme1 .system-name {
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.theme1 .brand-chip:hover{
+    background:#0d1d26;
+    transform:translateY(-3px);
+    box-shadow:0 0 15px rgba(0,217,255,.25);
+}
+
+.discount {
+  color: #d01012;
+}
+
+/* pagination */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 14px;
+    background: #07131a;
+    border: 1px solid red;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    box-sizing: border-box;
+    transition: background 0.2s, border-color 0.2s;
+}
+.pagination a:hover {
+    background: red;
+    border-color: #777;
+}
+
+.pagination-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+
+.pagination .current-page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid red;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background: #555555;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination .ellipsis {
+    padding: 0 5px;
+}
+
+/* advanced search page */
+
+.platform-dropdown {
+    width: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#platformDropdownButton {
+    width: 300px;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#platformDropdownButton::after {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+
+.platform-dropdown {
+    background-color: #2b3035 !important;
+    border: 1px solid #495057;
+}
+
+.platform-dropdown .form-check-label {
+    color: #ffffff !important;
+}
+
+.platform-dropdown .form-check-input {
+    background-color: #ffffff !important;
+    border: 1px solid #adb5bd !important;
+}
+
+.platform-dropdown .form-check-input:checked {
+    background-color: #0dcaf0 !important;
+    border-color: #0dcaf0 !important;
+}
+
+.platform-dropdown .form-check:hover {
+    background-color: #343a40;
+    border-radius: 4px;
+}
+
+/* feature labels for advanced search results */
+.listing-features {
+    padding: 10px 0;
+}
+
+.feature-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.feature-value {
+    background: #eee;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.9rem;
+}
+
+
+/* toggle switch */
+.form-switch .form-check-input {
+    width: 2.5em;
+    height: 1.5em;
 }

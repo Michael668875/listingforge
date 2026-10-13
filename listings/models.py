@@ -191,4 +191,9 @@ class PriceDrop(models.Model):
         managed = False
         db_table = "lf_price_drops"
 
+    @property
+    def currency_symbol(self):
+        return CURRENCY_SYMBOLS.get(self.currency, self.currency)
+
+
 
