@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, RedirectView
-from .models import Listing, PriceHistory, System, PriceDrop
+from .models import Listing, PriceHistory, System
+from scrape.models import PriceDrop
 
 # Create your views here.
 
@@ -23,8 +24,11 @@ class PriceDropsView(ListView):
     context_object_name = "drops"
 
     def get_queryset(self):
-        country = self.request.GET.get("country", "US")
-        return PriceDrop.objects.filter(country=country)    
+        country = self.request.GET.get("country", "US")        
+        return PriceDrop.objects.filter(
+            country=country,
+            status="ACTIVE",
+        ).order_by("-discount_percent")  
 
 
 #########

@@ -36,6 +36,8 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    'listings.apps.ListingsConfig',
+    'scrape.apps.ScrapeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
-    'listings',
 ]
 
 MIDDLEWARE = [
@@ -145,3 +146,38 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = os.getenv("DJANGO_SECURE_SSL_REDIRECT", "False") == "True"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+LOG_DIR = BASE_DIR / "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {
+            "format": "{asctime} {message}",
+            "style": "{",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "scrape_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOG_DIR / "scrape.log",
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 5,
+            "encoding": "utf-8",
+            "formatter": "standard",
+        },
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+            "formatter": "standard",
+        },
+    },
+    "root": {
+        "handlers": ["scrape_file", "console"],
+        "level": "INFO",
+    },
+}
+
