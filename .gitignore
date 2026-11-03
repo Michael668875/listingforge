@@ -219,3 +219,10 @@ __marimo__/
 
 .backup/
 
+games.jsonl
+platforms.jsonl
+covers.jsonl
+.env
+igdb.env
+*.jsonl
+

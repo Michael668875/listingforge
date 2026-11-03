@@ -38,6 +38,7 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
 INSTALLED_APPS = [
     'listings.apps.ListingsConfig',
     'scrape.apps.ScrapeConfig',
+    'canon.apps.CanonConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
