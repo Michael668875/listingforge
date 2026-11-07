@@ -62,7 +62,7 @@ class Cover(models.Model):
     def __str__(self):
         return self.image_id
 
-
+# Join table for Game and Platform
 class GamePlatform(models.Model):
     game = models.ForeignKey(
         Game,
@@ -88,5 +88,16 @@ class GamePlatform(models.Model):
         return f"{self.game} - {self.platform}"
 
 
+class TitleCleanupTerm(models.Model):
+    CATEGORY_CHOICES = [
+        ("unwanted", "Unwanted word"),
+        ("seller", "Seller description"),
+    ]
+
+    term = models.CharField(max_length=100, unique=True)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+
+    def __str__(self):
+        return self.term
 
 
