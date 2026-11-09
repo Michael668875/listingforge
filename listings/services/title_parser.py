@@ -13,6 +13,28 @@ import re
 from canon.models import Platform, TitleCleanupTerm
 from listings.models import Listing
 
+def clean_slugs():
+    slugs = Game.objects.values_list("slug", flat=True)
+
+    slug_words = []
+
+    for slug in slugs:
+        words = slug.split("-")
+        slug_words.append(words)
+
+    return slug_words
+
+def test_me():
+    with open("test_file.txt", "w", encoding="utf-8") as f:
+        text = clean_slugs()
+        for words in text:
+            joined = " ".join(words)
+            f.write(joined + "\n")
+#test_me()
+
+
+
+
 
 def detect_system(title, platform_lookup):
 
@@ -174,55 +196,68 @@ def match_game(cleaned_title, detected_system, canonical_games):
 
 
 
-#def match_game(cleaned_title, canonical_games):
-#
-#    if not cleaned_title:
-#        return None, 0, "unmatched"
-#
-#    title = cleaned_title.lower().strip()
-#
-#    # 1. Try exact matching first
-#    if title in canonical_games:
-#
-#        return canonical_games[title], 100, "exact"
-#
-#    # 2. Try fuzzy matching
-#    result = process.extractOne(
-#        title,
-#        canonical_games.keys(),
-#        scorer=fuzz.ratio
-#    )
-#
-#    if result is None:
-#        return None, 0, "unmatched"
-#
-#    matched_name, score, _ = result
-#
-#    # 3. Apply matching thresholds
-#    if score >= 95:
-#
-#        return canonical_games[matched_name], score, "fuzzy"
-#
-#    elif score >= 85:
-#
-#        return canonical_games[matched_name], score, "review"
-#
-#    else:
-#
-#        return None, score, "unmatched"
+def load_canon_games():
 
-#def load_canonical_games():
-#
-#    games = Game.objects.values_list("name", flat=True)
-#
-#    canonical = {}
-#
-#    for name in games:
-#        name = name.lower().strip()
-#
-#        canonical[name] = name
-#
-#    return canonical
+    games = Game.objects.values_list("slug", "igdb_id")
+
+    canon_games = {}
+
+    for slug, igdb_id in games:
+        cleaned_slug = slug.replace("-", " ").lower().strip()
+        canon_games[cleaned_slug] = igdb_id
+
+    return canon_games
+
+
+def match_listings():
+
+    terms, platforms, abbs = load_cleanup_data()
+
+    canon_games = load_canon_games()
+
+    listings = Listing.objects.all()
+
+    games = []
+
+    for listing in listings:
+
+        cleaned_title = clean_game_title(
+            listing.title,
+            terms,
+            platforms,
+            abbs
+        )
+
+        cleaned_title = cleaned_title.lower().strip()
+
+        game_id = canon_games.get(cleaned_title)
+
+        if game_id:
+#            print(listing.title, "->", game_id)
+
+            games.append(f"{listing.title} | {cleaned_title} -> {game_id}")
+
+    with open("test_listings.txt", "w", encoding="utf-8") as f:
+        f.write("\n".join(games))
+
+match_listings()
+
+
+
+# add this to models when ready
+#canon_game = models.ForeignKey(
+#    "canon.Game",
+#    on_delete=models.SET_NULL,
+#    null=True,
+#    blank=True,
+#    related_name="listings"
+#)
+
+# use this to display in browser
+# {{ listing.canon_game.name }}
+
+
+
 
 def run_parse():
 
@@ -313,32 +348,5 @@ def run_parse():
     print(f"Unmatched: {unmatched_count}")
 
 
-run_parse()
-
-#def run_parse():
-#    # Load cleanup data once
-#    terms, platforms, abbs = load_cleanup_data()
-#
-#    listings = Listing.objects.values_list("title", flat=True)
-#
-#    clean = []
-#
-#    # Process ebay listings
-#    for listing in listings:
-#
-#        cleaned_title = clean_game_title(
-#            listing,
-#            terms,
-#            platforms,
-#            abbs
-#        )
-#
-#        clean.append(cleaned_title)
-#
-#    with open("clean_titles.txt", "w", encoding="utf-8") as f:
-#        for clean_title in clean:
-#            f.write(clean_title + "\n")
-#
 #run_parse()
-
 
