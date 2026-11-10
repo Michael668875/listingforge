@@ -24,16 +24,6 @@ def clean_slugs():
 
     return slug_words
 
-def test_me():
-    with open("test_file.txt", "w", encoding="utf-8") as f:
-        text = clean_slugs()
-        for words in text:
-            joined = " ".join(words)
-            f.write(joined + "\n")
-#test_me()
-
-
-
 
 
 def detect_system(title, platform_lookup):
@@ -103,20 +93,21 @@ def load_canonical_games():
 
 
 def load_cleanup_data():
+    # terms to remove from listing title when comparing to slug
     terms = list(
         TitleCleanupTerm.objects.values_list("term", flat=True)
     )
-
+    # canonical list of platforms to check if they are in the listing title
     platforms = list(
         Platform.objects.values_list("name", flat=True)
     )
-
+    # abbreviated platform names to check for in listing title
     abbs = list(Platform.objects.values_list("abbreviation", flat=True)
     )
 
     return terms, platforms, abbs
 
-
+# clean up listing title for comparison to slug
 def clean_game_title(title, terms, platforms, abbs):
     if not title:
         return ""
@@ -149,7 +140,36 @@ def clean_game_title(title, terms, platforms, abbs):
 
     return title
 
+from django.db import connection
 
+
+def find_best_match(cleaned_title):
+
+    with connection.cursor() as cursor:
+
+        cursor.execute("""
+            SELECT
+                slug,
+                igdb_id,
+                strict_word_similarity(
+                    lower(btrim(replace(slug, '-', ' '))),
+                    %s
+                ) AS score
+
+            FROM games
+
+            WHERE %s %%>> lower(btrim(replace(slug, '-', ' ')))
+
+            ORDER BY
+                score DESC,
+                length(slug) DESC
+
+            LIMIT 5
+        """, [cleaned_title, cleaned_title])
+
+        return cursor.fetchall()
+
+# TEST FUNCTION to see if canon game title is in listing title
 def match_game(cleaned_title, detected_system, canonical_games):
 
     if not cleaned_title or not detected_system:
@@ -195,7 +215,7 @@ def match_game(cleaned_title, detected_system, canonical_games):
     return None, score, "unmatched"
 
 
-
+# get game slug and clean it up for comparison with listing title
 def load_canon_games():
 
     games = Game.objects.values_list("slug", "igdb_id")
@@ -206,18 +226,19 @@ def load_canon_games():
         cleaned_slug = slug.replace("-", " ").lower().strip()
         canon_games[cleaned_slug] = igdb_id
 
+#    test = list(canon_games.items())[:50]
+#
+#    print(test)
+
     return canon_games
 
+#load_canon_games()
 
 def match_listings():
 
     terms, platforms, abbs = load_cleanup_data()
 
-    canon_games = load_canon_games()
-
     listings = Listing.objects.all()
-
-    games = []
 
     for listing in listings:
 
@@ -226,21 +247,120 @@ def match_listings():
             terms,
             platforms,
             abbs
-        )
+        ).lower().strip()
 
-        cleaned_title = cleaned_title.lower().strip()
+        matches = find_best_match(cleaned_title)
 
-        game_id = canon_games.get(cleaned_title)
+        print(cleaned_title)
 
-        if game_id:
-#            print(listing.title, "->", game_id)
+        for slug, igdb_id, score in matches:
+            print(f"{score:.3f} | {slug} | {igdb_id}")
 
-            games.append(f"{listing.title} | {cleaned_title} -> {game_id}")
-
-    with open("test_listings.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(games))
+# compare game slug and listing title
+#def match_listings():
+#
+#    terms, platforms, abbs = load_cleanup_data()
+#
+#    canon_games = load_canon_games()
+#
+#    for slug, igdb_id in Game.objects.values_list("slug", "igdb_id"):
+#        cleaned_slug = slug.replace("-", " ").lower().strip()
+#
+#        if cleaned_slug in ["4", "crimson", "revival", "dark", "back", "outright"]:
+#            print(slug, igdb_id)
+#
+#    # TEMPORARY DEBUG
+#    print(f"Loaded {len(canon_games)} canonical games")
+#
+#    listings = Listing.objects.all()
+#
+#    for listing in listings:
+#
+#        # Clean eBay listing title
+#        cleaned_title = clean_game_title(
+#            listing.title,
+#            terms,
+#            platforms,
+#            abbs
+#        ).lower().strip()
+#
+#        best_match = None
+#        best_score = 0
+#
+#        # Compare against every IGDB slug
+#        for canon_title, igdb_id in canon_games.items():
+#
+            
+#            match = word_match(cleaned_title, canon_title)
+#
+#            if match:
+#                print(f"MATCH | {cleaned_title} | {canon_title}")
+            
+#
+#            score = fuzz.token_set_ratio(
+#                canon_title,
+#                cleaned_title
+#            )
+#
+#            if score > best_score:
+#                best_score = score
+#                best_match = canon_title
+#
+#        print(
+#            f"{best_score:.1f} | {cleaned_title} | {best_match}"
+#        )
 
 match_listings()
+
+#def match_listings():
+#
+#    terms, platforms, abbs = load_cleanup_data()
+#
+#    canon_games = load_canon_games()
+#
+#    listings = Listing.objects.all()
+#
+#    games = []
+#
+#    count = 0
+#
+#    for listing in listings:
+#
+#        cleaned_title = clean_game_title(
+#            listing.title,
+#            terms,
+#            platforms,
+#            abbs
+#        )
+#
+#        cleaned_title = cleaned_title.lower().strip()
+#
+#        best_match = None
+#        best_score = 0
+#
+#        for canon_title, igdb_id in canon_games.items():
+#
+#            score = fuzz.token_sort_ratio(canon_title, cleaned_title)
+#
+#            
+#
+#            print(f"{score} | {canon_title} | {cleaned_title}")
+
+#        if score >= 85:
+#            game_id = canon_games.get(cleaned_title)
+#
+#        if game_id:
+#            print(listing.title, "->", game_id)
+#
+#            games.append(f"{listing.title} | {cleaned_title} -> {game_id}")
+#
+#            count += 1
+#
+#    with open("test_listings.txt", "w", encoding="utf-8") as f:
+#        f.write("\n".join(games))
+#
+#    print(count)
+
 
 
 
