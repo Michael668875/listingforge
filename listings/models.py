@@ -123,6 +123,18 @@ class Listing(models.Model):
         db_index=True
     )
 
+    # add this to models when ready
+    canon_game = models.ForeignKey(
+        "canon.Game",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="listings"
+    )
+    # use this to display in browser
+    # {{ listing.canon_game.name }}
+
+    
     objects = ListingManager()
 
     class Meta:
