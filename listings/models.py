@@ -7,6 +7,7 @@ CURRENCY_SYMBOLS = {
     "AUD": "$",
     "GBP": "£",
     "EUR": "€",
+    "CAD": "$",
 }
 
 # Create your models here.

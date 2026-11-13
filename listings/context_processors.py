@@ -2,7 +2,8 @@ COUNTRIES = [
     ("AU", "🇦🇺 Australia"),
     ("US", "🇺🇸 United States"),
     ("GB", "🇬🇧 United Kingdom"),
-    ("DE", "🇩🇪 Germany"),
+    ("CA", "🇨🇦 Canada"),
+    ("IE", "🇮🇪 Ireland"),
 ]
 
 def country_context(request):

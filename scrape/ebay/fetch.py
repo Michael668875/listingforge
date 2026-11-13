@@ -61,7 +61,8 @@ def fetch_summaries(
         "EBAY_US": {"country": "US", "max_items": 100},
         "EBAY_AU": {"country": "AU", "max_items": 100},
         "EBAY_GB": {"country": "GB", "max_items": 100},
-        "EBAY_DE": {"country": "DE", "max_items": 100},
+        "EBAY_CA": {"country": "CA", "max_items": 100},
+        "EBAY_IE": {"country": "IE", "max_items": 100},
     }
 
     all_items = []
