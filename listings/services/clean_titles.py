@@ -22,6 +22,8 @@ def load_platforms():
         Platform.objects.values_list("name", "abbreviation")
     )
 
+    platform_data.sort(key=lambda x: len(x[0]), reverse=True)
+
     platforms = [name for name, abb in platform_data]
     abbs = [abb for name, abb in platform_data]
 
@@ -32,6 +34,28 @@ def get_titles():
     titles = Listing.objects.values_list("id", "title") 
 
     return titles
+
+def get_listing_platforms(titles, platforms, abbs):
+
+    listing_data = []
+
+    for listing_id, title in titles:
+
+        platform = ""
+
+        for name, abb in zip(platforms, abbs):
+
+             if re.search(rf"\b{re.escape(name)}\b", title, re.IGNORECASE) or (
+                abb and re.search(rf"\b{re.escape(abb)}\b", title, re.IGNORECASE)
+            ):
+                platform = name
+                break
+
+        listing_data.append((listing_id, title, platform))
+
+    return listing_data
+
+
 
 def words_for_removal(terms, platforms, abbs): 
 
@@ -84,13 +108,15 @@ def main():
 
     words_to_remove = words_for_removal(terms, platforms, abbs)
 
-    for id, title in titles: 
+    tuples = get_listing_platforms(titles, platforms, abbs)
+
+    for id, title, platform in tuples: 
 
         clean = clean_title(title, words_to_remove)
 
-        clean_titles.append((id, clean))
+        clean_titles.append((id, clean, platform))
 
-    print(clean_titles)
+    print(clean_titles[:50])
 
 if __name__ == "__main__":
     main()
