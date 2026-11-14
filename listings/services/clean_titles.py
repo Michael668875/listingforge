@@ -33,7 +33,7 @@ def get_titles():
 
     return titles
 
-def words_for_removal(terms, platforms, abbs): # split this into two functions
+def words_for_removal(terms, platforms, abbs): 
 
     # combine all terms, longest first
     words = sorted(
@@ -70,34 +70,6 @@ def clean_title(title, words_to_remove):
     title = title.lower()
 
     return title
-
-
-def clean_slug(slug):
-
-    return slug.replace("-", " ").lower()
-
-
-def load_canon_games():
-
-    games = Game.objects.values_list(
-        "slug",
-        "igdb_id",
-        "platforms__name"
-    )
-
-    canon_games = {}
-
-    for slug, igdb_id, platform in games:
-
-        if platform not in canon_games:
-            canon_games[platform] = {}
-
-        cleaned_slug = clean_slug(slug)
-        
-        # create dictionary of platform, slug, igdb_id
-        canon_games[platform][cleaned_slug] = igdb_id
-
-    return canon_games
 
 
 def main():
